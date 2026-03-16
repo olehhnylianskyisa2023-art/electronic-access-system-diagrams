@@ -1,0 +1,28 @@
+@startuml
+!define DIRECTION top to bottom
+skinparam backgroundColor #FEFEFE
+skinparam classBackgroundColor #FCE4EC
+skinparam ArrowColor #C2185B
+
+title Діаграма кооперації\nПроцес входження в гуртожиток
+
+object Student
+object Camera
+object FaceRecognition
+object Database
+object AccessController
+object Door
+object Logger
+
+Student --> Camera : 1: підходить до камери
+Camera --> FaceRecognition : 2: надсилає зображення
+FaceRecognition --> Database : 3: запит на верифікацію
+Database --> FaceRecognition : 4: повертає профіль
+FaceRecognition --> Camera : 5: результат розпізнавання
+FaceRecognition --> AccessController : 6: дозвіл/заборона доступу
+AccessController --> Door : 7: відкривання/блокування
+Door --> Student : 8: статус доступу
+AccessController --> Logger : 9: запис логу
+Logger --> Database : 10: збереження в БД
+
+@enduml
