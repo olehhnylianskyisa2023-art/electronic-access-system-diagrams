@@ -1,0 +1,41 @@
+@startuml
+!define DIRECTION top to bottom
+skinparam backgroundColor #FEFEFE
+skinparam usecaseBackgroundColor #E1F5FF
+skinparam actorBackgroundColor #FFF9C4
+skinparam ArrowColor #0277BD
+
+title Діаграма варіантів використання\nЕлектронна система пропуску в гуртожиток
+
+actor Студент as student
+actor Охоронець as guard
+actor Адміністратор as admin
+participant "Система розпізнавання\nобличчя" as face_system
+
+rectangle "Система пропуску" {
+    usecase "Вхід в гуртожиток" as UC1
+    usecase "Реєстрація обличчя" as UC2
+    usecase "Перегляд логів доступу" as UC3
+    usecase "Управління доступом" as UC4
+    usecase "Сповіщення про\nпідозрілу активність" as UC5
+    usecase "Вихід з системи" as UC6
+}
+
+student --> UC1
+student --> UC2
+student --> UC6
+
+guard --> UC3
+guard --> UC5
+
+admin --> UC4
+admin --> UC3
+admin --> UC5
+
+face_system --> UC1
+face_system --> UC2
+
+UC1 ..> UC2 : <<include>>
+UC4 ..> UC3 : <<extend>>
+
+@enduml
