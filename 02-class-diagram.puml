@@ -1,0 +1,101 @@
+@startuml
+!define DIRECTION top to bottom
+skinparam backgroundColor #FEFEFE
+skinparam classBackgroundColor #E8F5E9
+skinparam classBorderColor #2E7D32
+skinparam ArrowColor #1B5E20
+
+title Діаграма класів\nЕлектронна система пропуску в гуртожиток
+
+abstract class User {
+    -id: String
+    -name: String
+    -email: String
+    -phone: String
+    -createdAt: DateTime
+    +getInfo(): String
+    +updateProfile(): void
+}
+
+class Student {
+    -studentId: String
+    -room: Room
+    -isActive: Boolean
+    +registerFace(): void
+    +requestAccess(): Boolean
+}
+
+class Security {
+    -securityId: String
+    -shiftStart: Time
+    -shiftEnd: Time
+    +viewAccessLog(): List
+    +acknowledgeAlert(): void
+}
+
+class Administrator {
+    -adminId: String
+    -permissions: Set
+    +manageUsers(): void
+    +configureSystem(): void
+    +generateReports(): File
+}
+
+class FaceRecognition {
+    -modelVersion: String
+    -accuracy: Double
+    +recognizeFace(image): User
+    +registerNewFace(userId, image): Boolean
+    +verifyFace(image): Boolean
+}
+
+class AccessLog {
+    -logId: String
+    -userId: String
+    -timestamp: DateTime
+    -building: String
+    -room: String
+    -status: String
+    +getLog(): String
+    +filterByDate(date): List
+}
+
+class Room {
+    -roomId: String
+    -building: String
+    -floor: Integer
+    -capacity: Integer
+    -allowedUsers: List
+    +addUser(user): void
+    +removeUser(user): void
+}
+
+class Building {
+    -buildingId: String
+    -name: String
+    -address: String
+    -rooms: List
+    +getRooms(): List
+}
+
+class Alert {
+    -alertId: String
+    -type: String
+    -timestamp: DateTime
+    -description: String
+    -resolved: Boolean
+    +acknowledge(): void
+    +escalate(): void
+}
+
+User <|-- Student
+User <|-- Security
+User <|-- Administrator
+Student "1" --> "1" Room : lives_in
+Room "*" --> "1" Building : belongs_to
+Student "1" --> "1" FaceRecognition : uses
+AccessLog "1" --> "1" Student : for_user
+AccessLog "1" --> "1" Room : access_to
+Alert "1" --> "1" Student : about_user
+
+@enduml
