@@ -1,0 +1,41 @@
+@startuml
+!define DIRECTION top to bottom
+skinparam backgroundColor #FEFEFE
+skinparam sequenceArrowColor #0277BD
+skinparam sequenceActorBackgroundColor #FFF9C4
+
+title Діаграма послідовності\nСценарій успішного входження в гуртожиток
+
+actor Студент
+participant Camera
+participant "Розпізнавання\nобличчя"
+participant БД
+participant "Контролер\nдоступу"
+participant Двері
+participant Сповіщення
+
+Студент -> Camera: 1. Підходить до камери
+activate Camera
+Camera -> "Розпізнавання\nобличчя": 2. Надсилає зображення
+activate "Розпізнавання\nобличчя"
+"Розпізнавання\nобличчя" -> БД: 3. Запит верифікації
+activate БД
+БД -> "Розпізнавання\nобличчя": 4. Дані студента
+deactivate БД
+"Розпізнавання\nобличчя" -> "Розпізнавання\nобличчя": 5. Аналіз матчу
+"Розпізнавання\nобличчя" -> "Контролер\nдоступу": 6. ✓ Обличчя знайдено
+deactivate "Розпізнавання\nобличчя"
+activate "Контролер\nдоступу"
+"Контролер\nдоступу" -> Двері: 7. Відкрити двері
+activate Двері
+Двері -> Студент: 8. Двері відкриті ✓
+deactivate Двері
+"Контролер\nдоступу" -> Сповіщення: 9. Записати лог доступу
+activate Сповіщення
+Сповіщення -> БД: 10. Збергання логу
+Сповіщення -> Студент: 11. Статус: дозвіл доступу
+deactivate Сповіщення
+deactivate "Контролер\nдоступу"
+deactivate Camera
+
+@enduml
