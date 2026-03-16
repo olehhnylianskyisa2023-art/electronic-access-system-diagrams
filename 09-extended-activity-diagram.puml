@@ -1,0 +1,31 @@
+@startuml
+!define DIRECTION top to bottom
+skinparam backgroundColor #FEFEFE
+skinparam activityBackgroundColor #F1F8E9
+skinparam activityBorderColor #558B2F
+skinparam ArrowColor #33691E
+
+title Діаграма діяльності - Розширена\nПроцеси системи
+
+start
+fork
+    :Процес 1: Контроль входження;
+    :Захоплення обличчя;
+    :Розпізнавання;
+    :Видання доступу;
+fork again
+    :Процес 2: Логування;
+    :Запис часу;
+    :Запис користувача;
+    :Запис локації;
+fork again
+    :Процес 3: Моніторинг;
+    :Перевірка тривоги;
+    :Оновлення статусу;
+    :Сповіщення адміна;
+end fork
+:Синхронізація процесів;
+:Завершення операції;
+stop
+
+@enduml
