@@ -1,0 +1,56 @@
+@startuml
+!define DIRECTION top to bottom
+skinparam backgroundColor #FEFEFE
+skinparam nodeBackgroundColor #E8EAF6
+skinparam nodeBorderColor #3F51B5
+skinparam ArrowColor #1A237E
+
+title Діаграма розгортання\nІнфраструктура системи
+
+node "Кампус" as campus {
+    node "Гуртожиток" as dorm {
+        node "Вхід" as entrance {
+            component [Камера розпізнавання] as cam1
+            component [Контролер входу] as ctrl1
+        }
+        node "Коридор" as corridor {
+            component [Камера моніторингу] as cam2
+        }
+    }
+}
+
+node "Сервер" as server {
+    component [API сервер] as api_server
+    component [Розпізнавання обличчя] as recognition_engine
+    component [Сервіс логування] as logging_engine
+    component [Сервіс сповіщень] as notification_engine
+}
+
+node "База даних" as db_server {
+    component [PostgreSQL] as postgres
+    component [Бекап] as backup
+}
+
+node "Адміністративна станція" as admin {
+    component [Адміністративна панель] as admin_panel
+    component [Монітор логів] as log_monitor
+}
+
+node "Мобільні пристрої" as mobile {
+    component [Мобільний додаток] as mobile_app_deployed
+}
+
+cam1 --> ctrl1
+cam1 --> api_server
+cam2 --> api_server
+ctrl1 --> api_server
+api_server --> recognition_engine
+api_server --> logging_engine
+api_server --> notification_engine
+api_server --> postgres
+postgres --> backup
+admin_panel --> api_server
+log_monitor --> api_server
+mobile_app_deployed --> api_server
+
+@enduml
