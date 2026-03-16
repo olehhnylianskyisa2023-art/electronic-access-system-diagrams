@@ -1,0 +1,57 @@
+@startuml
+!define DIRECTION top to bottom
+skinparam backgroundColor #FEFEFE
+skinparam componentBackgroundColor #E8EAF6
+skinparam componentBorderColor #3F51B5
+skinparam ArrowColor #1A237E
+skinparam interfaceBackgroundColor #FFF9C4
+
+title Діаграма компонентів\nЕлектронна система пропуску в гуртожиток
+
+package "Клієнтська частина" {
+    component [Web UI\nАдміністратора] as web_ui
+    component [Мобільний додаток\nСтудента] as mobile_app
+}
+
+package "Серверна частина" {
+    component [API Gateway] as api_gateway
+    component [Сервіс автентифікації] as auth_service
+    component [Сервіс розпізнавання\nобличчя] as recognition_service
+    component [Сервіс управління\nдоступом] as access_service
+    component [Сервіс логування] as logging_service
+    component [Сервіс сповіщень] as notification_service
+}
+
+package "Зберігання даних" {
+    database [База даних\nPostgreSQL] as db
+    database [Кеш\nRedis] as cache
+    component [Файлове сховище\n(фото обличчь)] as file_storage
+}
+
+package "Зовнішні пристрої" {
+    component [Камери розпізнавання] as cameras
+    component [Контролери дверей] as door_controllers
+}
+
+web_ui --> api_gateway : HTTP/HTTPS
+mobile_app --> api_gateway : HTTP/HTTPS
+
+api_gateway --> auth_service
+api_gateway --> recognition_service
+api_gateway --> access_service
+api_gateway --> logging_service
+api_gateway --> notification_service
+
+auth_service --> db
+recognition_service --> db
+recognition_service --> cache
+recognition_service --> file_storage
+access_service --> db
+access_service --> door_controllers
+logging_service --> db
+notification_service --> mobile_app : Push-сповіщення
+
+cameras --> recognition_service : зображення
+door_controllers --> access_service : статус
+
+@enduml
